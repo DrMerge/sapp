@@ -10,13 +10,13 @@ const configuration = new Configuration({
 });
 
 const openai = new OpenAIApi(configuration);
-
+let botRunning;
 const engine = () => {
   const prompt = fs.readFileSync(path.join(__dirname, "prompt3.txt"), "utf8");
-  const character = fs.readFileSync(
-    path.join(__dirname, "character.txt"),
-    "utf8"
-  );
+  // const character = fs.readFileSync(
+  //   path.join(__dirname, "character.txt"),
+  //   "utf8"
+  // );
 
   client.on("qr", (qr) => {
     qrcode.toFile(
@@ -36,7 +36,7 @@ const engine = () => {
   });
 
   client.on("message", async (message) => {
-    if (message.body != "") {
+    if (message.body != "" && botRunning) {
       try {
         const response1 = await openai.createCompletion({
           model: "text-davinci-003",
@@ -91,6 +91,8 @@ const engine = () => {
       } catch (err) {
         console.log("Problem loading sentiment");
       }
+    } else if (!botRunning) {
+      return null;
     }
   });
 

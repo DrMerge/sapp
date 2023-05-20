@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="qr.png" alt="QR CODE" />
+
+    <div>
+      <h1>WELCOME TO JEZEEBEL BOT</h1>
+      <p>scan the Qrcode to start using Jezeebel bot in your Whatsapp</p>
+
+      <button id="botControl">Turn on Whatsapp bot</button>
+    </div>
+    <script>
+      const botControl = document.getElementById("botControl");
+      const baseURL = "http://localhost:5000/";
+      let botRunning;
+      botControl.onclick = async () => {
+        botControl.textContent =
+          botControl.textContent === "Turn on Whatsapp bot"
+            ? "Turn off Whatsapp bot"
+            : "Turn on Whatsapp bot";
+
+        console.log(botControl.textContent);
+
+        if (botControl.textContent === "Turn on Whatsapp bot") {
+          botRunning = false;
+        } else if (botControl.textContent === "Turn off Whatsapp bot") {
+          botRunning = true;
+        }
+        await fetch(baseURL, {
+          method: "POST",
+          body: JSON.stringify({ botRunning }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+      };
+    </script>
+  </body>
+</html>
